@@ -66,23 +66,21 @@ namespace jogoVelha_api_
             {
                 for(int j=0; j<3; j++)
                 {
-                    if (cont == 2 && position != -1)
-                    {
-                        return new int[2] { i, position };
-                    }
-
                     if (currentBoard![i][j] != "")
                     {
-                        if (currentBoard![i][j] != option.Text)
+                        if (currentBoard![i][j] != select.Text)
                         {
                             cont++;
                         }
                     }
-                    else
+                    else 
                     {
                         position = j;
                     }
-                    
+                    if (cont == 2 && position != -1)
+                    {
+                        return new int[2] { i, position };
+                    }
                 }
                 cont = 0;
                 position = -1;
@@ -99,23 +97,21 @@ namespace jogoVelha_api_
             {
                 for (int j = 0; j < 3; j++)
                 {
-                    if (cont == 2 && position != -1)
-                    {
-                        return new int[2] {j,position};
-                    }
-
                     if (currentBoard![j][i] != "")
                     {
-                        if (currentBoard![j][i] != option.Text)
+                        if (currentBoard![j][i] != select.Text)
                         {
                             cont++;
                         }
                     }
-                    else
+                    else 
                     {
-                        position = i;
+                        position = j;
                     }
-
+                    if (cont == 2 && position != -1)
+                    {
+                        return new int[2] { position, i };
+                    }
                 }
                 cont = 0;
                 position = -1;
@@ -132,12 +128,12 @@ namespace jogoVelha_api_
             {
                 if (currentBoard![i][i] != "")
                 {
-                    if (currentBoard![i][i] != option.Text)
+                    if (currentBoard![i][i] != select.Text)
                     {
                         cont++;
                     }
                 }
-                else
+                else if (currentBoard![i][i] == "")
                 {
                     position = i;
                 }
@@ -155,12 +151,13 @@ namespace jogoVelha_api_
             {
                 if(currentBoard![line][column] != "")
                 {
-                    if(currentBoard![line][column] != option.Text)
+                    if(currentBoard![line][column] != select.Text)
                     {
                         cont++;
                     }
                 }
-                else {
+                else if (currentBoard![line][column] == "")
+                {
                     positionL = line;
                     positionC = column;
                 }
@@ -181,54 +178,279 @@ namespace jogoVelha_api_
 
             if (analysis != null)
             {
-                int moveLine = analysis[0];
-                int moveColumn = analysis[1];
+                moveLine = analysis[0];
+                moveColumn = analysis[1];
+                return true;
             }
-            return true;
+            return false;
         }
-        private bool attack()
+
+        private double howManyMoves()
         {
-            int verifica = 0;
-            for(int i=0; i<=2; i++)
+            int cont = 0;
+            for(int i=0; i<3; i++)
             {
-                for(int j =0; j<=2; j++)
+                for(int j=0; j<3; j++)
                 {
-                    if(currentBoard[i][j] != "")
+                    if(currentBoard![i][j] != "")
                     {
-                        verifica++;
+                        cont++;
+                    }
+                }
+            }   
+
+            return cont/2.0;
+        }
+
+        private bool atack()
+        {
+            double moves = howManyMoves();
+
+            if (moves == 0)
+            {
+                moveLine = 0;
+                moveColumn = 0;
+                return true;
+            } else if(moves > 0 && moves < 1)
+            {
+                if(currentBoard![1][1] == "")
+                {
+                    moveLine = 1;
+                    moveColumn = 1;
+                    return true;
+                }
+                else
+                {
+                    moveLine = 0;
+                    moveColumn = 0;
+                    return true;
+                }
+            } else if(moves == 1)
+            {
+                if(currentBoard![0][2] != "" || currentBoard![2][0] != "" || currentBoard![1][1] != "")
+                {
+                    moveLine = 2;
+                    moveColumn = 2;
+                    return true;
+                }
+                else
+                {
+                    moveLine = 1;
+                    moveColumn = 1;
+                    return true;
+                }
+            }
+            else if (moves > 1 && moves < 2)
+            {
+                if((currentBoard![0][2] != "" && currentBoard![2][0] != "") || (currentBoard![0][0] != "" && currentBoard![2][2] != "" && currentBoard![0][0] != select.Text))
+                {
+                    moveLine = 1;
+                    moveColumn = 0;
+                    return true;
+                } else if(currentBoard![1][1] != "" && currentBoard![1][1] != select.Text && currentBoard![2][2] != "")
+                {
+                    moveLine = 0;
+                    moveColumn = 2;
+                    return true;
+                }
+            } else if(moves == 2)
+            {
+                if(currentBoard![0][0] == select.Text && currentBoard![2][2] == select.Text)
+                {
+                    if(currentBoard![0][1] == "" && currentBoard![1][2] == "" && currentBoard![0][2] == "") {
+                        moveLine = 0;
+                        moveColumn = 2;
+                        return true;
+                    } else if(currentBoard![1][0] == "" && currentBoard![2][1] == "" && currentBoard![2][0] == "")
+                    {
+                        moveLine = 2;
+                        moveColumn = 0;
+                        return true;
+                    }
+
+                }
+                else if(currentBoard![0][0] == select.Text && currentBoard![1][1] == select.Text)
+                {
+                    if(currentBoard![0][1] == "" && currentBoard![0][2] == "")
+                    {
+                        if(currentBoard![2][1] == "")
+                        {
+                            moveLine = 0;
+                            moveColumn = 1;
+                            return true;
+                        } else if(currentBoard![2][0] == "")
+                        {
+                            moveLine = 0;
+                            moveColumn = 2;
+                            return true;
+                        }
+                    } else if (currentBoard![1][0] == "" && currentBoard![2][0] == "")
+                    {
+                        if (currentBoard![1][2] == "")
+                        {
+                            moveLine = 1;
+                            moveColumn = 0;
+                            return true;
+                        }
+                        else if (currentBoard![0][2] == "")
+                        {
+                            moveLine = 2;
+                            moveColumn = 0;
+                            return true;
+                        }
                     }
                 }
             }
-            if(verifica == 0)                   //significa que é a primeira jogada, tab vazio
-            {
-                currentBoard[2][0] = select.Text;
-            }
-            else if(verifica == 1)
-            {
-                if (currentBoard[1][1] != select.Text && currentBoard[1][1] != "")
-                {
-                    currentBoard[0][0] = select.Text;
-                }
-                else if((currentBoard[0][1] != select.Text && currentBoard[0][1] != "")) || (currentBoard[1][0] !=select.Text && currentBoard)
-            }
 
-       
-
-
-
-            
+            return false;
         }
 
+        private void randonMove()
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (currentBoard![i][j] == "")
+                    {
+                        moveLine = i;
+                        moveColumn = j;
+                        return;
+                    }
+                }
+            }
+        }
 
+        private int[]? win()
+        {
+            int conth = 0;
+            int positionh = -1;
+
+            int contv = 0;
+            int positionv = -1;
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    // Vitoria na horizontal
+                    
+                    if (currentBoard![i][j] != "")
+                    {
+                        if (currentBoard![i][j] == select.Text)
+                        {
+                            conth++;
+                        }
+                    }
+                    else
+                    {
+                        positionh = j;
+                    }
+                    if (conth == 2 && positionh != -1)
+                    {
+                        return new int[2] { i, positionh };
+                    }
+
+                    // vitoria na vertical
+                 
+                    if (currentBoard![j][i] != "")
+                    {
+                        if (currentBoard![j][i] == select.Text)
+                        {
+                            contv++;
+                        }
+                    }
+                    else
+                    {
+                        positionv = j;
+                    }
+                    if (contv == 2 && positionv != -1)
+                    {
+                        return new int[2] { positionv, i };
+                    }
+                }
+         
+                conth = 0;
+                positionh = -1;
+
+                contv = 0;
+                positionv = -1;
+            }
+
+            // ganhar diagonal
+            int cont = 0;
+            int position = -1;
+
+            for (int i = 0; i < 3; i++)
+            {
+                if (currentBoard![i][i] != "")
+                {
+                    if (currentBoard![i][i] == select.Text)
+                    {
+                        cont++;
+                    }
+                }
+                else if (currentBoard![i][i] == "")
+                {
+                    position = i;
+                }
+                if (cont == 2 && position != -1)
+                {
+                    return new int[2] { position, position };
+                }
+            }
+
+            int column = 2;
+            cont = 0;
+            int positionL = -1;
+            int positionC = -1;
+
+            for (int line = 0; line < 3; line++)
+            {
+                if (currentBoard![line][column] != "")
+                {
+                    if (currentBoard![line][column] == select.Text)
+                    {
+                        cont++;
+                    }
+                }
+                else if (currentBoard![line][column] == "")
+                {
+                    positionL = line;
+                    positionC = column;
+                }
+                if (cont == 2 && positionC != -1 && positionL != -1)
+                {
+                    return new int[2] { positionL, positionC };
+                }
+                column--;
+            }
+
+            return null;
+        }
+        
+  
         private void newPlay()
         {
-            if (defense())
+            var analysis = win();
+            if (analysis != null)
             {
-                return ;
+                moveLine = analysis[0];
+                moveColumn = analysis[1];
+                MessageBox.Show("for win");
+            }
+            else if (defense())
+            {
+                MessageBox.Show("for defence");
+            }
+            else if(atack())
+            {
+                MessageBox.Show("for atack");
             }
             else
             {
-
+                MessageBox.Show("for randon");
+                randonMove();
             }
         }
 
@@ -238,10 +460,10 @@ namespace jogoVelha_api_
             if (select.Text != "Select") {
                 // Exemplo de test
 
+                newPlay();
                 currentBoard![moveLine][moveColumn] = select.Text;
                 setGame(currentBoard);
 
-                newPlay();
 
                 moveURL = baseURL 
                     + "api/jogo?marcador=" + select.Text 
@@ -300,7 +522,7 @@ namespace jogoVelha_api_
                         MessageBox.Show("Jogada Realizada");
                     }catch(Exception ex)
                     {
-                        MessageBox.Show(stringBoard);
+                        MessageBox.Show(stringBoard + ex);
                     }
                 }
                 catch(Exception error)
