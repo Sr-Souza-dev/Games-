@@ -3,9 +3,9 @@ Neste repositório contém 3 jogos desenvolvidos durante a materia de desenvolvi
 
 ### Canhão de Newton
 
-<img src="images/newton.png">
+<img src="images/newton.PNG">
 
 ### Jogo da Cobrinha
 
-<img src="images/cobrinha.png">
+<img src="images/cobrinha.PNG">
 

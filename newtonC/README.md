@@ -24,7 +24,7 @@ Para a realização do experimento mental de Newton, um jogo será implementado,
 ## Resultados e Análises
 A partir da definição do cálculo da força gravitacional que age nos dois objetos (Terra e projétil), obtivemos a simulação:
 
-<img src="../images/newton.png">
+<img src="../images/newton.PNG">
 
 Cabe ressaltar que para que os projéteis, de fato, orbitem na Terra, a aceleração centrípeta deve ser perpendicular à velocidade. Já em relação à velocidade de escape, necessária para que o projétil lançado não caia nem entre em órbita, mas vá em direção ao infinito.
 
