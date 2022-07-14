@@ -4,7 +4,7 @@ Analisar, por meio da associação da física e da computação, a atuação da 
 ## Fundamento Teórico
 O canhão de Newton é um experimento mental idealizado pelo físico para a confirmação de sua lei da gravitação universal [1]. Tal lei de Newton defende que:
 
-<img src="images/fgu.PNG">
+ $F = G \frac{Mm}{d^2}$
 
 De modo que G é caracterizado como a constante de gravitação universal com valor $G \approx 6,67 \times 10^{-11} \frac{Nm^2}{kg^2}$, M e m são as massas de dois corpos diferentes analisados e d a distância entre o centro de massa dos corpos.
 
